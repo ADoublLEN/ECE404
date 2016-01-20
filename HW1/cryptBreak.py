@@ -17,7 +17,6 @@ if len(sys.argv) is not 2:
 def decrypt(encrypted_bv, key):
     PassPhrase = "Hopes and dreams of a million years"
     BLOCKSIZE = 16
-    key = key.strip()
     numbytes = BLOCKSIZE // 8
     # Reduce the passphrase to a bit array of size BLOCKSIZE:
     bv_iv = BitVector(bitlist = [0]*BLOCKSIZE)
@@ -26,9 +25,7 @@ def decrypt(encrypted_bv, key):
         bv_iv ^= BitVector( textstring = textstr )
     # Reduce the key to a bit array of size BLOCKSIZE:
     key_bv = BitVector(bitlist = [0]*BLOCKSIZE)
-    for i in range(0,len(key) // numbytes):
-        keyblock = key[i*numbytes:(i+1)*numbytes]
-        key_bv ^= BitVector( textstring = keyblock )
+    key_bv  = BitVector(bitstring = key)
     # Create a bitvector for storing the decrypted plaintext bit array:
     msg_decrypted_bv = BitVector( size = 0 )
     # Carry out differential XORing of bit blocks and decryption:
@@ -45,22 +42,16 @@ def decrypt(encrypted_bv, key):
 
 def iterations(charset, maxlength):
     return (''.join(candidate)
-        for candidate in itertools.chain.from_iterable(itertools.product(charset, repeat=i)
+        for candidate in itertools.chain.from_iterable(itertools.product(charset, repeat=16)
         for i in range(1, maxlength + 1)))
-
-def is_power2(num):
-    return num != 0 and ((num & (num - 1)) == 0)
     
 def main():
     print "BEGIN"
     # Create a bitvector from the ciphertext hex string:
     FILEIN = open(sys.argv[1])
     encrypted_bv = BitVector( hexstring = FILEIN.read() )
-    gen = itertools.combinations(string.printable, 16)
-    for i, attempt in enumerate(iterations(string.printable, 16)):
+    for i, attempt in enumerate(iterations("01", 16)):
         out =  decrypt(encrypted_bv, attempt)
-        if(is_power2(i)):
-            print i
         if(out.find("funerals") != -1):
             print "Decrypted text: ",out
             print "Key: ",attempt
