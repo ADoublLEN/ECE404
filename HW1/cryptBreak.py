@@ -2,9 +2,9 @@
 
 ### Author: Alex Dunker
 ### ECN: adunker
-### HW:
-### Filename:	
-### Due Date:
+### HW: 1
+### Filename: cryptBreak.py	
+### Due Date: 01/21/2016
 
 import sys
 import itertools
@@ -41,6 +41,7 @@ def decrypt(encrypted_bv, key):
     return msg_decrypted_bv.get_text_from_bitvector()
 
 def iterations(charset, maxlength):
+    #returns all permutations of inputted charset all length 16
     return (''.join(candidate)
         for candidate in itertools.chain.from_iterable(itertools.product(charset, repeat=16)
         for i in range(1, maxlength + 1)))
@@ -49,9 +50,13 @@ def main():
     print "BEGIN"
     # Create a bitvector from the ciphertext hex string:
     FILEIN = open(sys.argv[1])
+    # Read in the input file (encrypted.txt)
     encrypted_bv = BitVector( hexstring = FILEIN.read() )
+    # Loop through all the combinations in the keyspace
     for i, attempt in enumerate(iterations("01", 16)):
+        # Decrypt with the attempt
         out =  decrypt(encrypted_bv, attempt)
+        # Check if attempt works
         if(out.find("funerals") != -1):
             print "Decrypted text: ",out
             print "Key: ",attempt
