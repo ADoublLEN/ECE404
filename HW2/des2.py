@@ -23,12 +23,7 @@ key_shifts = [1,1,2,2,2,2,2,2,1,2,2,2,2,2,2,1]
 
 def create_keys(kBV):
     subkeys = []
-    key56 = [0]*56
-    for i in range(56):
-        key56[i] = kBV[key_permutation[i]-1]
-    print(''.join(map(str,key56)))
-    print(kBV.permute(key_permutation_1))
-    sBV = BitVector( bitstring = map(str, key56))
+    sBV = kBV.permute(key_permutation_1)
     for i in range(16):
         [left, right] = sBV.divide_into_two()
         left << key_shifts[i]
