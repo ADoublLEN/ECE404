@@ -107,7 +107,6 @@ def des(encrypt_or_decrypt, input_file, output_file, key ):
         ## Reverse the two and write it to the file
         bitvec = RE + LE
         FILEOUT.write(bitvec.get_text_from_bitvector())
-        return(bitvec.get_text_from_bitvector())
     FILEOUT.close()
 
 ########################### MAIN ##############################################
