@@ -6,7 +6,6 @@
 ### Filename: ece404_hw04_dunker.py
 ### Due Date: 02/05/2016
 
-import sys
 from BitVector import *
 
 inmessage = "plaintext.txt"
