@@ -9,14 +9,16 @@
 import BitVector
 
 class RC4:
-    ## Initiali
+    ## Initialize state vector S
     S = [i for i in range(256)]
 
     def __init__(self, key):
         self.key = key
         j = 0
+        ## Initial permutation
         for i in range(256):
             j = (j + self.S[i] + ord(key[i % len(key)])) % 256
+            ## Swap
             self.S[i], self.S[j] = self.S[j], self.S[i]
 
     def RC4(self,image):
@@ -34,6 +36,7 @@ class RC4:
         byte = 0
         encrypt = []
 
+        ## Generate pseudorandom byte stream
         while True:
             i = (i + 1) % 256
             j = (j + tempS[i]) % 256
@@ -76,11 +79,14 @@ def main():
     originalImage = "".join(img)
     encryptedImage = rc4Cipher.RC4(originalImage)
 
+    ## Writes with headers
     with open("encrypted_"+image, 'wba') as out:
         for x in header[0:3]:
             out.write(x)
         out.write(bytearray(encryptedImage))
 
+
+    ## Writes with header
     decryptedImage = rc4Cipher.RC4(encryptedImage)
     with open("decrypted_"+image, 'wba') as out:
         for x in header[0:3]:
