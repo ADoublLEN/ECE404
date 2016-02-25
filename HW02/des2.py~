@@ -1,0 +1,20 @@
+#!/usr/bin/env python
+
+### Author: Alex Dunker
+### ECN: adunker
+### HW: 2
+### Filename: DES_dunker.py	
+### Due Date: 01/28/2015
+
+import sys
+import string
+from BitVector import *
+
+message = "0123456789ABCDEF"
+key = "133457799BBCDFF1"
+
+if __name__ == "__main__":
+    mBV = BitVector( hexstring = message)
+    kBV = BitVector( hexstring = message)
+    print(mBV)
+    print(kBV)
