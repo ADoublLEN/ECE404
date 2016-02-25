@@ -4,7 +4,7 @@
 ### ECN: adunker
 ### HW: 4
 ### Filename: hw05.py
-### Due Date: 02/15/2016
+### Due Date: 02/18/2016
 
 import BitVector
 
@@ -18,22 +18,17 @@ class RC4:
         ## Initial permutation
         for i in range(256):
             j = (j + self.S[i] + ord(key[i % len(key)])) % 256
-            ## Swap
-            self.S[i], self.S[j] = self.S[j], self.S[i]
+            self.S[i], self.S[j] = self.S[j], self.S[i] ##SWAP
 
     def RC4(self,image):
         img = []
         if type(image[0]) is str:
-            for char in image:
-                img.append(ord(char))
-        else:
-            img = image
+            for char in image: img.append(ord(char))
+        else: img = image
 
         tempS = self.S[:]
 
-        i = 0
-        j = 0
-        byte = 0
+        i ,j, byte = 0, 0, 0
         encrypt = []
 
         ## Generate pseudorandom byte stream
@@ -46,7 +41,6 @@ class RC4:
             byte += 1
             if byte == len(img):
                 break
-
         return encrypt
 
     def encrypt(self, f):
@@ -68,7 +62,6 @@ class RC4:
         return f
 
 def main():
-
     ## Personal testing for HW 5. Outputs the images with their headers so you can view them
     rc4Cipher = RC4('keystring')
     image = "winterTown.ppm"
@@ -85,15 +78,12 @@ def main():
             out.write(x)
         out.write(bytearray(encryptedImage))
 
-
     ## Writes with header
     decryptedImage = rc4Cipher.RC4(encryptedImage)
     with open("decrypted_"+image, 'wba') as out:
         for x in header[0:3]:
             out.write(x)
         out.write(bytearray(decryptedImage))
-
-
 
 if __name__ == "__main__":
     main()
