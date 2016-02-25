@@ -115,8 +115,8 @@ def openFile(file, type):
     for block in data_blocks: block.pad_from_left(128)
     return data_blocks
 
-
-def writeFile(data_block, filename, type):
+## Type = True for encrypt, false for decrypt | Mode = True for text, false for hex
+def writeFile(data_block, filename, type, mode):
     ## Open the output file
     out = open(filename, 'wa')
     ## Depending if we're encrypting or decrypting for the size of byte to write
@@ -126,7 +126,10 @@ def writeFile(data_block, filename, type):
             bv = BitVector(intVal = data, size = 256)
         else:
             bv = BitVector(intVal = data, size = 128)
-        out.write(bv.get_text_from_bitvector())
+        if mode:
+            out.write(bv.get_text_from_bitvector())
+        else:
+            out.write(bv.get_hex_string_from_bitvector())
 
 
 def main():
@@ -145,7 +148,8 @@ def main():
         ## Get the encrypted data
         encrypted = encrypt(sys.argv[2], public)
         ## Write the file
-        writeFile(encrypted, sys.argv[3], True)
+        writeFile(encrypted, sys.argv[3], True, True)
+        writeFile(encrypted, "HEX" + sys.argv[3], True, False)
     elif sys.argv[1] == '-d':
         ## Open the private key file to get the private key information
         with open("private.txt", 'r') as f:
@@ -159,7 +163,8 @@ def main():
         ## Get the decrypted information
         decrypted = decrypt(sys.argv[2], private, p, q)
         ## Write the file out
-        writeFile(decrypted, sys.argv[3], False)
+        writeFile(decrypted, sys.argv[3], False, True)
+        writeFile(decrypted, "HEX"+sys.argv[3], False, False)
         pass
 
 

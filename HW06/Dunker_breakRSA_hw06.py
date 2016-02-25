@@ -17,15 +17,33 @@ def main():
     pub2, priv2, p2, q2, e = createKeys(3)
     pub3, priv3, p3, q3, e = createKeys(3)
 
+    with open("private1.txt", 'w') as f :
+            f.write("d="+str(priv1[0])+"\n")
+            f.write("n="+str(p1*q1)+"\n")
+            f.write("p="+str(p1)+"\n")
+            f.write("q="+str(q1)+"\n")
+
+    with open("private2.txt", 'w') as f :
+        f.write("d="+str(priv2[0])+"\n")
+        f.write("n="+str(p2*q2)+"\n")
+        f.write("p="+str(p2)+"\n")
+        f.write("q="+str(q2)+"\n")
+
+    with open("private3.txt", 'w') as f :
+        f.write("d="+str(priv3[0])+"\n")
+        f.write("n="+str(p3*q3)+"\n")
+        f.write("p="+str(p3)+"\n")
+        f.write("q="+str(q3)+"\n")
+
     ## Encrypt 1 file 3 times with each of the different public keys
     encrypted1 = encrypt("message.txt", pub1)
     encrypted2 = encrypt("message.txt", pub2)
     encrypted3 = encrypt("message.txt", pub3)
 
     ## Write these files out
-    writeFile(encrypted1, "enc1.txt", True)
-    writeFile(encrypted2, "enc2.txt", True)
-    writeFile(encrypted3, "enc3.txt", True)
+    writeFile(encrypted1, "enc1.txt", True, False)
+    writeFile(encrypted2, "enc2.txt", True, False)
+    writeFile(encrypted3, "enc3.txt", True, False)
 
     ## Calculate N the product of all the values of n
     N = pub1[1] * pub2[1] * pub3[1]
@@ -60,6 +78,8 @@ def main():
     ## Write out the recovered file
     out = open("cracked.txt", 'wa')
     out.write(crackedBV.get_text_from_bitvector())
+    out = open("HEXcracked.txt", 'wa')
+    out.write(crackedBV.get_hex_string_from_bitvector())
 
 if __name__ == "__main__":
     main()
